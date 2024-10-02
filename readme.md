@@ -47,7 +47,6 @@
    ```bash
    run install.bat
 
-
 # My Scraper Project 🇬🇧
 
 This project is a scraper for collecting data from website using multithreading. It utilizes several Python libraries for working with databases, processing requests, and generating content.
