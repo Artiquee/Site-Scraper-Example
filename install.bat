@@ -8,6 +8,7 @@ powershell -Command "(gc .env) -replace '^PROJECT_NAME=.*', 'PROJECT_NAME=%NEW_P
 
 if "%INSTALL_METHOD%"=="d" (
     echo Installing via Docker...
+    powershell -Command "(gc .env) -replace '^DB_HOST=.*', 'DB_HOST=db' | Set-Content .env"
     docker-compose up --build
 ) else if "%INSTALL_METHOD%"=="l" (
     echo Installing locally...
@@ -15,6 +16,15 @@ if "%INSTALL_METHOD%"=="d" (
     call .venv\Scripts\activate
     pip install -r requirements.txt
     alembic init
+    alembic upgrade head
+    set /p START_SCRIPT="You want to run script now?[y/n]: "
+    if "%START_SCRIPT%"=="y" (
+        python main.py
+    ) else if "%START_SCRIPT%"=="n" (
+        echo "Ok, see you later)"
+    ) else (
+         echo Invalid option selected.
+    )
 ) else (
     echo Invalid option selected.
 )
