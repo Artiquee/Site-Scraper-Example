@@ -13,11 +13,18 @@ if [ "$INSTALL_METHOD" = "d" ]; then
 elif [ "$INSTALL_METHOD" = "l" ]; then
   echo "Installing locally..."
   python -m venv .venv
-  source .venv/bin/activate
+  . .venv/bin/activate
   pip install -r requirements.txt
-  alembic init
-  alembic upgrade head
   echo "Scraper ready to use, edit .env file for your db creds"
+  read -p "Are you change your .env?[y/n]: " ENV_CHANGED
+  if [ "$ENV_CHANGED" = "y" ]; then
+    alembic init
+    alembic upgrade head
+  elif [ "$ENV_CHANGED" = "n" ]; then
+    echo "Ok, change later and start script manually"
+  else
+    echo "Invalid option selected."
+  fi
   read -p "You want to run script now?[y/n]: " START_SCRIPT
   if [ "$START_SCRIPT" = "y" ]; then
     python main.py
